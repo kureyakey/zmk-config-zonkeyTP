@@ -1,10 +1,21 @@
-# SPDX-License-Identifier: Apache-2.0
-# Zephyr 4.x 用 board definition for seeeduino_xiao_ble
+---
+boards:
+  - name: seeeduino_xiao_ble
+    vendor: seeed
+    socs:
+      - name: nrf52840
+    revision:
+      format: major.minor.patch
+      default: 1.0.0
+      exact: false
+      revisions:
+        - name: 1.0.0
 
-name: seeeduino_xiao_ble
-vendor: lowprokb
-socs:
-  - name: nrf52840
-revisions:
-  - name: 1.0.0
-    default: true
+include:
+  - board: seeeduino_xiao_ble
+    shield: zonkey_R nice_oled
+  - board: seeeduino_xiao_ble
+    shield: zonkey_L dongle_display
+    snippet: studio-rpc-usb-uart
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
