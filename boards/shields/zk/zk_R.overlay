@@ -11,6 +11,7 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &default_layout;
+        zmk,battery = &vbatt; // "vbatt"
         zephyr,display = &oled;
     };
 
