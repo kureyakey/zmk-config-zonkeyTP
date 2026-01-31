@@ -14,31 +14,31 @@
         zephyr,display = &oled;
     };
 
-    // 分割入力の設定
     split_inputs {
         #address-cells = <1>;
         #size-cells = <0>;
-
         trackball_split: trackball_split@0 {
             compatible = "zmk,input-split";
             reg = <0>;
         };
     };
 
-    // トラックボールのリスナー設定
     trackball_listener: trackball_listener {
         compatible = "zmk,input-listener";
-        status = "disabled";
+        status = "okay";
         device = <&trackball>;
+        input-processors = <&zip_temp_layer 1 400>;
+        scroll {
+            layers = <2>;
+            input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>, <&zip_xy_scaler 1 16>, <&zip_xy_to_scroll_mapper>;
+        };
     };
 };
 
-// トランスフォーム設定（右手用オフセット）
 &default_transform {
     col-offset = <6>;
 };
 
-// マトリックススキャン設定
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
@@ -49,14 +49,13 @@
         ;
 };
 
-// PMW3610設定 - SPI1を使用
 &spi1 {
     status = "okay";
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+    compatible = "nordic,nrf-spim";
     pinctrl-0 = <&spi1_default>;
     pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default", "sleep";
-    compatible = "nordic,nrf-spim";
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     trackball: pd@0 {
         status = "okay";
@@ -75,37 +74,23 @@
     device = <&trackball>;
 };
 
-&trackball_listener {
-    status = "okay";
-    input-processors = <&zip_temp_layer 1 400>;
-
-    scroll {
-        layers = <2>;
-        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>, <&zip_xy_scaler 1 16>, <&zip_xy_to_scroll_mapper>;
-    };
-};
-
-// ピン設定
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 1, 0), NRF_PSEL(TWIM_SCL, 1, 10)>;
+            psels = <NRF_PSEL(TWIM_SDA, 1, 0)>, <NRF_PSEL(TWIM_SCL, 1, 10)>;
         };
     };
-
     i2c0_sleep: i2c0_sleep {
         group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 1, 0), NRF_PSEL(TWIM_SCL, 1, 10)>;
+            psels = <NRF_PSEL(TWIM_SDA, 1, 0)>, <NRF_PSEL(TWIM_SCL, 1, 10)>;
             low-power-enable;
         };
     };
-
     spi1_default: spi1_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>, <NRF_PSEL(SPIM_MOSI, 0, 4)>, <NRF_PSEL(SPIM_MISO, 0, 4)>;
         };
     };
-
     spi1_sleep: spi1_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>, <NRF_PSEL(SPIM_MOSI, 0, 4)>, <NRF_PSEL(SPIM_MISO, 0, 4)>;
@@ -119,7 +104,6 @@
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
-
     oled: ssd1306@3c {
         compatible = "solomon,ssd1306fb";
         reg = <0x3c>;
@@ -136,4 +120,4 @@
 };
 
 &xiao_serial { status = "disabled"; };
-&uart0 { status = "disabled";};
+&uart0 { status = "disabled"; };
