@@ -1,7 +1,7 @@
-if SHIELD_ZONKEY_R
+if SHIELD_ZK_R
 
   config ZMK_KEYBOARD_NAME
-      default "zonkey_R"
+      default "zk_R"
 
   config ZMK_SPLIT
       default y
@@ -32,10 +32,10 @@ if SHIELD_ZONKEY_R
 
 endif
 
-if SHIELD_ZONKEY_L
+if SHIELD_ZK_L
 
     config ZMK_KEYBOARD_NAME
-        default "zonkey_L"
+        default "zk_L"
 
     config ZMK_SPLIT_ROLE_CENTRAL
         default y
