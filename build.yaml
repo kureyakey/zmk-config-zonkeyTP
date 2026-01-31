@@ -1,7 +1,9 @@
+---
 include:
   - board: seeeduino_xiao_ble
-    shield: zk_L
-    cmake-args: "-DCONFIG_ZMK_KEYMAP_NAME=\"zk\""
+    shield: zk_R nice_oled
   - board: seeeduino_xiao_ble
-    shield: zonkey_R nice_oled
-    cmake-args: "-DCONFIG_ZMK_KEYMAP_NAME=\"zk\""
+    shield: zk_L
+    snippet: studio-rpc-usb-uart
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
