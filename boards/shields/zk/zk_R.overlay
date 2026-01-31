@@ -5,6 +5,9 @@
 #include <dt-bindings/zmk/input_transform.h>
 #include <dt-bindings/gpio/gpio.h>
 
+/* RCマクロの衝突回避 */
+#define MK(row, col) RC(row, col)
+
 / {
     chosen {
         zephyr,display = &oled;
@@ -24,11 +27,11 @@
         compatible = "zmk,matrix-transform";
         columns = <5>;
         rows = <3>;
-        /* 5列x3行のマトリックスをキーマップ上の位置に変換 */
+        /* MK(行, 列) を使用して衝突を回避 */
         map = <
-            RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4)
-            RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4)
-            RC(2,0) RC(2,1) RC(2,2)
+            MK(0,0) MK(0,1) MK(0,2) MK(0,3) MK(0,4)
+            MK(1,0) MK(1,1) MK(1,2) MK(1,3) MK(1,4)
+            MK(2,0) MK(2,1) MK(2,2)
         >;
     };
 
@@ -72,7 +75,7 @@
     };
 };
 
-/* XIAO BLEのI2C設定（OLED用） */
+/* XIAO BLEのI2C設定 */
 &i2c0 {
     status = "okay";
     oled: ssd1306@3c {
@@ -92,7 +95,7 @@
     };
 };
 
-/* SPI設定（トラックボール PMW3360用） */
+/* SPI設定 */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
