@@ -1,8 +1,8 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: zonkey_R nice_oled
+    shield: zk_R nice_oled
   - board: seeeduino_xiao_ble
-    shield: zkL
+    shield: zk_L
     snippet: studio-rpc-usb-uart
   - board: seeeduino_xiao_ble
     shield: settings_reset
