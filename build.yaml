@@ -1,16 +1,3 @@
----
-boards:
-  - name: seeeduino_xiao_ble
-    vendor: seeed
-    socs:
-      - name: nrf52840
-    revision:
-      format: major.minor.patch
-      default: 1.0.0
-      exact: false
-      revisions:
-        - name: 1.0.0
-
 include:
   - board: seeeduino_xiao_ble
     shield: zonkey_R nice_oled
