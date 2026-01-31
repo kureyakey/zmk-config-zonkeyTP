@@ -2,11 +2,11 @@
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/input_transform.h> // INPUT_TRANSFORM_Y_INVERT 用
-#include <dt-bindings/gpio/gpio.h>           // GPIO_ACTIVE_HIGH 用
+#include <dt-bindings/zmk/input_transform.h>
+#include <dt-bindings/gpio/gpio.h>
 
 / {
-    /* 1. nice_oledが探しているラベルをxiao_bleのI2Cに紐付け */
+    /* 必須: nice_oledが参照するI2Cノードラベルの定義 */
     nice_oled_i2c: &arduino_i2c {};
 
     chosen {
@@ -16,11 +16,9 @@
     };
 
     /* 入力処理の設定 */
-    split_inputs {
+    trackball_split: trackball_split {
         compatible = "zmk,input-split";
-        trackball_split: trackball_split {
-            device = <&trackball>;
-        };
+        device = <&trackball>;
     };
 
     trackball_listener: trackball_listener {
@@ -35,12 +33,11 @@
     };
 };
 
-/* I2Cを有効化 */
+/* I2CとSPIの有効化 */
 &arduino_i2c {
     status = "okay";
 };
 
-/* kscanの設定（右手用のピンを指定してください） */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
@@ -51,7 +48,6 @@
         ;
 };
 
-/* SPI設定の修正（MOSI/MISOの重複回避を確認してください） */
 &pinctrl {
     spi1_default: spi1_default {
         group1 {
