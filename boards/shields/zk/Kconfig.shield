@@ -1,5 +1,5 @@
-config SHIELD_ZK_R
-    def_bool $(shields_list_contains,zk_R)
-
 config SHIELD_ZK_L
     def_bool $(shields_list_contains,zk_L)
+
+config SHIELD_ZK_R
+    def_bool $(shields_list_contains,zk_R)
