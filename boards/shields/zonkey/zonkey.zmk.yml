@@ -2,7 +2,7 @@ file_format: "1"
 id: zonkey
 name: zonkey
 type: shield
-url: https://github.com/kureyakey/zonkey.git
+url: https://github.com/kureyakey/zonkeyTP.git
 requires: [seeeduino_xiao_ble]
 features:
   - keys
