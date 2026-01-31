@@ -9,11 +9,25 @@
 
 / {
     chosen {
+        zephyr,display = &oled;
+        zmk,battery = &vbatt;
         zmk,kscan = &kscan0;
         zmk,physical-layout = &default_layout;
-        zmk,battery = &vbatt; // "vbatt"
-        zephyr,display = &oled;
     };
+};
+
+/* これを追加：シールド側の接続先を強制変更 */
+&nice_oled_i2c {
+    status = "disabled";
+};
+
+/* もし nice_oled 側の設定と競合する場合は以下も試してください */
+/ {
+    aliases {
+        /* シールドが内部で参照しているエイリアスを上書き */
+        nice_oled_i2c = &i2c0;
+    };
+};
 
     split_inputs {
         #address-cells = <1>;
