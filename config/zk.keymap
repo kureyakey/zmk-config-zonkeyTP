@@ -298,12 +298,10 @@ behaviors {
         };
     };
 };
-/* config/zk.keymap の末尾に追記 */
-
 &i2c1 {
     status = "disabled";
 };
 
-&uart1 {
-    status = "disabled";
+&i2c0 {
+    status = "okay";
 };
