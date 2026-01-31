@@ -32,12 +32,6 @@
 #define JP_HANZEN       GRAVE             // 半角/全角
 #define JP_BSLH  INT1         // (backslash)
 
-/ {
-    keymap {
-        compatible = "zmk,keymap";
-        // ...
-    };
-};
 
 &mt {
     flavor = "balanced";
@@ -194,7 +188,12 @@ behaviors {
           bindings = <&kp LA(LG(RIGHT_ARROW))>, <&kp LA(LG(LEFT_ARROW))>;
           tap-ms = <20>;
       };
+
+       none: none {
+        compatible = "zmk,behavior-none";
+        #binding-cells = <0>;
     };
+};
 
     keymap {
         compatible = "zmk,keymap";
