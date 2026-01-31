@@ -1,4 +1,4 @@
-#define ZMK_KEYMAP_NAME zonkey
+#define ZMK_KEYMAP_NAME zk
 #include <dt-bindings/zmk/behaviors.h>
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
