@@ -152,5 +152,10 @@
 /* ---------- UART OFF ---------- */
 &xiao_serial { status = "disabled"; };
 &uart0 { status = "disabled"; };
-&i2c0 { status = "disabled"; };
-&spi1 { status = "disabled"; };
+&i2c0  { status = "disabled"; };
+&i2c1  { status = "okay"; };     // OLED用
+&spi0  { status = "okay"; };     // トラックボール用
+&spi1  { status = "disabled"; };
+&spi2  { status = "disabled"; };
+&spi3  { status = "disabled"; };
+&uart0 { status = "disabled"; };
