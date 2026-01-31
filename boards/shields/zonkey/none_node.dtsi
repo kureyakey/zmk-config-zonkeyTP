@@ -1,0 +1,9 @@
+/ {
+    behaviors {
+        /delete-node/ none;
+        none: none {
+            compatible = "zmk,behavior-none";
+            #binding-cells = <0>;
+        };
+    };
+};
