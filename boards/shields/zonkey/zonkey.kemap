@@ -31,6 +31,13 @@
 #define JP_HANZEN       GRAVE             // 半角/全角
 #define JP_BSLH  INT1         // (backslash)
 
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+        // ...
+    };
+};
+
 &mt {
     flavor = "balanced";
     quick-tap-ms = <0>;
