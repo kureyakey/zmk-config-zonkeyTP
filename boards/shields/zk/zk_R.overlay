@@ -12,7 +12,28 @@
         zmk,physical-layout = &default_layout;
     };
 
-    /* レイアウトと行列変換の設定 */
+    /* 入力プロセッサの定義を追加 */
+    zip_temp_layer: zip_temp_layer {
+        compatible = "zmk,input-processor-temp-layer";
+        #input-processor-cells = <2>;
+    };
+
+    zip_xy_transform: zip_xy_transform {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <1>;
+    };
+
+    zip_xy_scaler: zip_xy_scaler {
+        compatible = "zmk,input-processor-scaler";
+        #input-processor-cells = <2>;
+    };
+
+    zip_xy_to_scroll_mapper: zip_xy_to_scroll_mapper {
+        compatible = "zmk,input-processor-to-scroll";
+        #input-processor-cells = <0>;
+    };
+
+    /* レイアウト設定 */
     default_layout: default_layout {
         compatible = "zmk,physical-layout";
         display-name = "Default Layout";
@@ -24,7 +45,6 @@
         compatible = "zmk,matrix-transform";
         columns = <5>;
         rows = <3>;
-        /* RCマクロを使わず、直接 (行 * 列数 + 列) を記述して衝突を回避 */
         map = <
             (((0) * 5) + (0)) (((0) * 5) + (1)) (((0) * 5) + (2)) (((0) * 5) + (3)) (((0) * 5) + (4))
             (((1) * 5) + (0)) (((1) * 5) + (1)) (((1) * 5) + (2)) (((1) * 5) + (3)) (((1) * 5) + (4))
@@ -32,7 +52,7 @@
         >;
     };
 
-    /* 入力処理（トラックボール）の設定 */
+    /* 入力処理の設定 */
     trackball_split: trackball_split {
         compatible = "zmk,input-split";
         device = <&trackball>;
