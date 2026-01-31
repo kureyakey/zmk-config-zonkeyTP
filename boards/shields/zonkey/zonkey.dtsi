@@ -3,6 +3,16 @@
 #include <physical_layouts.dtsi>
 
 / {
+    behaviors {
+        none: none {
+            compatible = "zmk,behavior-none";
+            #binding-cells = <0>;
+        };
+    };
+};
+
+
+/ {
     default_layout: default_layout {
         compatible = "zmk,physical-layout";
         display-name = "default";
