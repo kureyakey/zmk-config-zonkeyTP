@@ -22,7 +22,6 @@
         compatible = "zmk,input-listener";
         status = "okay";
         device = <&trackball>;
-        // 第1引数: レイヤー番号, 第2引数: タイムアウト(ms)
         input-processors = <&zip_temp_layer 1 400>; 
         
         scroll {
@@ -32,8 +31,8 @@
     };
 };
 
-/* I2C設定: nice_oled (SSD1306) の定義 */
-&arduino_i2c {
+/* XIAO BLEのI2C設定 */
+&i2c0 {
     status = "okay";
     oled: ssd1306@3c {
         compatible = "solomon,ssd1306fb";
@@ -52,9 +51,9 @@
     };
 };
 
-/* SPI設定: トラックボール (PMW3360等) の定義 */
+/* SPI設定: トラックボール用 */
 &pinctrl {
-    spi1_default: spi1_default {
+    spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>, 
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>, 
@@ -62,8 +61,7 @@
         };
     };
     
-    // SPIのスリープ時設定も推奨（省電力のため）
-    spi1_sleep: spi1_sleep {
+    spi0_sleep: spi0_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>, 
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>, 
@@ -73,19 +71,19 @@
     };
 };
 
-&arduino_spi {
+&spi0 {
     status = "okay";
-    pinctrl-0 = <&spi1_default>;
-    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&xiao_d 1 GPIO_ACTIVE_LOW>; // CSピンを適切に指定してください
+    cs-gpios = <&xiao_d 1 GPIO_ACTIVE_LOW>;
 
     trackball: trackball@0 {
         status = "okay";
         compatible = "pixart,pmw3360";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        irq-gpios = <&xiao_d 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // IRQピンを指定
+        irq-gpios = <&xiao_d 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
     };
 };
 
