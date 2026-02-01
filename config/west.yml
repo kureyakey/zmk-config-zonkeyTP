@@ -2,25 +2,20 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: mctechnology17
-      url-base: https://github.com/mctechnology17
-    - name: badjeff
-      url-base: https://github.com/badjeff
-    # te9no（ドングル用）は削除
+    - name: kureyakey
+      url-base: https://github.com/kureyakey
+    - name: caksoylar 
+      url-base: https://github.com/caksoylar  
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: v0.3
       import: app/west.yml
     - name: zmk-pmw3610-driver
-      remote: badjeff
-      revision: zmk-0.3
-    # zmk-dongle-display は削除
-    - name: zmk-oled-adapter
-      remote: mctechnology17
+      remote: kureyakey
       revision: main
-    - name: zmk-nice-oled
-      remote: mctechnology17
+    - name: zmk-rgbled-widget  # <-- new entry
+      remote: caksoylar
       revision: main
   self:
     path: config
