@@ -8,6 +8,8 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &default_layout;
+        // 左手でもOLEDを使うなら以下を有効にする（使わないならコメントアウトでOK）
+        // zephyr,display = &oled;
     };
 };
 
@@ -21,12 +23,31 @@
         ;
 };
 
-&xiao_serial { status = "disabled"; };
-&uart0 { status = "disabled"; };
-&i2c0 {
-    status = "disabled";
+/* --- 右手と共通のピン定義 (pinctrl) を記述してエラーを回避 --- */
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 15)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 14)>;
+        };
+    };
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 15)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 14)>;
+            low-power-enable;
+        };
+    };
 };
 
-&i2c1 {
-    status = "disabled";
-};
+/* --- I2C0の設定：定義だけしておき、使わない場合は disabled にする --- */
+&i2c0 {
+    status = "disabled"; // 左手でOLEDを使わないなら disabled、使うなら okay
+    compatible = "nordic,nrf-twi";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    clock-frequency = <100000>;
+
+    oled: ssd1306@3c {
+        compatible = "solomon,ssd13
