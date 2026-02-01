@@ -7,11 +7,24 @@
 
 / {
     chosen {
+        zmk,kscan = &kscan0;
         zmk,physical-layout = &default_layout;
         zephyr,display = &oled;
     };
 
-    /* 分割入力の設定などはルートノード / { } の中に書く */
+    kscan0: kscan0 {
+        compatible = "zmk,kscan-gpio-charlieplex";
+        interrupt-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        gpios
+            = <&xiao_d 2 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 3 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 6 GPIO_ACTIVE_HIGH>
+            , <&gpio0 10 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 7 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 8 GPIO_ACTIVE_HIGH>
+            ;
+    };
+
     split_inputs {
         #address-cells = <1>;
         #size-cells = <0>;
@@ -29,30 +42,18 @@
     };
 };
 
-/* --- ここから下はルートノードの外側 (&参照形式) --- */
-
 &default_transform {
     col-offset = <6>;
-};
-
-&kscan0 {
-    col-gpios
-        = <&xiao_d 10 GPIO_ACTIVE_HIGH>
-        , <&xiao_d 9 GPIO_ACTIVE_HIGH> 
-        , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
-        , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
-        , <&gpio0 10 GPIO_ACTIVE_HIGH>
-        ;
 };
 
 // PMW3610設定 - SPI1を使用
 &spi1 {
     status = "okay";
-    compatible = "nordic,nrf-spim";
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  // P0.09 (NFC1.09)
     pinctrl-0 = <&spi1_default>;
     pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default", "sleep";
+    compatible = "nordic,nrf-spim";
 
     trackball: pd@0 {
         status = "okay";
@@ -81,7 +82,7 @@
     };
 };
 
-// Pinctrl設定
+// 右手OLED用I2C設定
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
@@ -97,8 +98,50 @@
             low-power-enable;
         };
     };
+};
 
+// SPI設定 (PMW3610用) - SPI1を使用してI2C0との競合を回避
+&pinctrl {
     spi1_default: spi1_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0,
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                <NRF_PSEL(SPIM_MISO, 0, 4)>;
+        };
+    };
+
+    spi1_sleep: spi1_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                <NRF_PSEL(SPIM_MISO, 0, 4)>;
+            low-power-enable;
+        };
+    };
+};
+
+&i2c0 {
+    status = "okay";
+    compatible = "nordic,nrf-twi";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    clock-frequency = <100000>;
+
+    oled: ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+        reg = <0x3c>;
+        width = <128>;
+        height = <32>;
+        segment-offset = <0>;
+        page-offset = <0>;
+        display-offset = <0>;
+        multiplex-ratio = <31>;
+        com-sequential;
+        inversion-on;
+        prechargep = <0x22>;
+    };
+};
+
+&xiao_serial { status = "disabled"; };
+&uart0 { status = "disabled";};
