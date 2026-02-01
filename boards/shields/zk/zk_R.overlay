@@ -87,9 +87,10 @@
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
+            /* xiao_ble の実在ピンを使う（未接続でOK） */
             psels = <
-                NRF_PSEL(TWIM_SCL, 0, 7)
-                NRF_PSEL(TWIM_SDA, 0, 6)
+                NRF_PSEL(TWIM_SCL, 0, 27)
+                NRF_PSEL(TWIM_SDA, 0, 26)
             >;
         };
     };
@@ -97,13 +98,14 @@
     i2c0_sleep: i2c0_sleep {
         group1 {
             psels = <
-                NRF_PSEL(TWIM_SCL, 0, 7)
-                NRF_PSEL(TWIM_SDA, 0, 6)
+                NRF_PSEL(TWIM_SCL, 0, 27)
+                NRF_PSEL(TWIM_SDA, 0, 26)
             >;
             low-power-enable;
         };
     };
 };
+
 /* ---------- SPI / PMW3610 ---------- */
 &spi1 {
     status = "okay";
