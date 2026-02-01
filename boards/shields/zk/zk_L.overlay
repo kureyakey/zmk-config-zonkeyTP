@@ -8,19 +8,7 @@
 / {
     chosen {
         zmk,physical-layout = &default_layout;
-        zephyr,display = &oled;
     };
-
-  &kscan0 {
-        col-gpios
-            = <&xiao_d 10 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 9 GPIO_ACTIVE_HIGH> 
-            , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
-            , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
-            , <&gpio0 10 GPIO_ACTIVE_HIGH>
-            , <&gpio0 9 GPIO_ACTIVE_HIGH>
-            ;
-};
 
     split_inputs {
         #address-cells = <1>;
@@ -35,7 +23,7 @@
     left_encoder_bottom: left_encoder_bottom {
         compatible = "alps,ec11";
         a-gpios = <&xiao_d 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        b-gpios = <&xiao_d 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        b-gpios = <&xiao_d 9  (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         steps = <12>;
         status = "okay";
     };
@@ -54,65 +42,20 @@
         triggers-per-rotation = <10>;
     };
 
-    trackball_listener: trackball_listener {
-        compatible = "zmk,input-listener";
-        status = "disabled";
-        device = <&trackball_split>;
-    };
+/* ===== kscan ===== */
+&kscan0 {
+    col-gpios =
+        <&xiao_d 10 GPIO_ACTIVE_HIGH>,
+        <&xiao_d 9  GPIO_ACTIVE_HIGH>,
+        <&xiao_d 8  GPIO_ACTIVE_HIGH>,
+        <&xiao_d 7  GPIO_ACTIVE_HIGH>,
+        <&gpio0 10  GPIO_ACTIVE_HIGH>,
+        <&gpio0 9   GPIO_ACTIVE_HIGH>;
 };
 
-&trackball_listener {
-    status = "okay";
-    input-processors = <&zip_temp_layer 1 400>;
 
-    scroll {
-        layers = <2>;
-        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>, <&zip_xy_scaler 1 16>, <&zip_xy_to_scroll_mapper>;
-    };
-};
 
-&zip_temp_layer { require-prior-idle-ms = <200>; };
 
-// I2C設定 (OLED用)
-&pinctrl {
-    i2c1_default: i2c1_default {
-        group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 0, 4)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 5)>;
-        };
-    };
-
-    i2c1_sleep: i2c1_sleep {
-        group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 0, 4)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 5)>;
-            low-power-enable;
-        };
-    };
-};
-
-&i2c1 {
-    status = "okay";
-    compatible = "nordic,nrf-twi";
-    pinctrl-0 = <&i2c1_default>;
-    pinctrl-1 = <&i2c1_sleep>;
-    pinctrl-names = "default", "sleep";
-
-    clock-frequency = <100000>;
-    oled: ssd1306@3c {
-        compatible = "solomon,ssd1306fb";
-        reg = <0x3c>;
-        width = <128>;
-        height = <32>;
-        segment-offset = <0>;
-        page-offset = <0>;
-        display-offset = <0>;
-        multiplex-ratio = <31>;
-        com-sequential;
-        inversion-on;
-        prechargep = <0x22>;
-    };
-};
-
+/* ===== UART disable ===== */
 &xiao_serial { status = "disabled"; };
-&uart0 { status = "disabled";};
+&uart0 { status = "disabled"; };
